@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Summarizer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #3498db;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            background-color: #34495e;
+            border: none;
+            border-radius: 5px;
+            color: #ecf0f1;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 15px;
+        }
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+        .output {
+            margin-top: 30px;
+            background-color: #34495e;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .output h2 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        .file-input {
+            margin-bottom: 15px;
+        }
+        .file-input input[type="file"] {
+            display: none;
+        }
+        .file-input label {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+        .file-input label:hover {
+            background-color: #2980b9;
+        }
+        #file-name {
+            margin-top: 10px;
+            color: #3498db;
+            font-style: italic;
+        }
+        .export-button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        .export-button:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <h1>Article Summarizer</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="file-input">
+            <label for="file">Upload PDF or TXT file</label>
+            <input type="file" name="file" id="file" accept=".pdf,.txt">
+            <div id="file-name"></div>
+        </div>
+        <textarea name="article" id="article" placeholder="Enter your article here or upload a file above...">{{ article }}</textarea>
+        <div class="button-group">
+            <div class="radio-group">
+                <input type="radio" id="brief" name="summary_type" value="brief" {% if summary_type != 'detailed' %}checked{% endif %}>
+                <label for="brief">Brief Summary</label>
+                <input type="radio" id="detailed" name="summary_type" value="detailed" {% if summary_type == 'detailed' %}checked{% endif %}>
+                <label for="detailed">Detailed Summary</label>
+            </div>
+            <input type="submit" value="Summarize">
+        </div>
+    </form>
+
+    {% if summary %}
+    <div class="output">
+        <h2>Original Article:</h2>
+        <p>{{ article }}</p>
+        <div class="word-count">Word count: {{ article_word_count }}</div>
+        
+        <h2>Summary ({{ summary_type }}):</h2>
+        <p>{{ summary }}</p>
+        <div class="word-count">Word count: {{ summary_word_count }}</div>
+        
+        <form action="{{ url_for('export_pdf') }}" method="post">
+            <input type="hidden" name="article" value="{{ article }}">
+            <input type="hidden" name="summary" value="{{ summary }}">
+            <input type="hidden" name="summary_type" value="{{ summary_type }}">
+            <input type="hidden" name="article_word_count" value="{{ article_word_count }}">
+            <input type="hidden" name="summary_word_count" value="{{ summary_word_count }}">
+            <button type="submit" class="export-button">Export as PDF</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <script>
+        document.getElementById('file').addEventListener('change', function() {
+            var fileName = this.files[0].name;
+            document.getElementById('file-name').textContent = 'File uploaded: ' + fileName;
+        });
+    </script>
+</body>
+</html>
