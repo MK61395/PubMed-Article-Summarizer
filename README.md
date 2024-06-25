@@ -29,20 +29,20 @@ This Flask web application summarizes PubMed articles using natural language pro
 ## Installation
 
 1. Clone the repository:
-git clone https://github.com/MK61395/PubMed-Article-Summarizer.git
-cd PubMed-Article-Summarizer
+- `git clone https://github.com/MK61395/PubMed-Article-Summarizer.git`
+- `cd PubMed-Article-Summarizer`
 
 2. Create a virtual environment (optional but recommended):
-python -m venv venv
-source venv/bin/activate  # On Windows, use venv\Scripts\activate
+- `python -m venv venv`
+- `source venv/bin/activate`  # On Windows, use `venv\Scripts\activate`
 
 3. Install the required packages:
-pip install -r requirements.txt
+- `pip install -r requirements.txt`
 
 ## Usage
 
 1. Run the Flask application:
-python app.py
+- `python app.py`
 
 2. Open a web browser and navigate to `http://127.0.0.1:5000/`
 
